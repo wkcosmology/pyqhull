@@ -4,13 +4,22 @@
 #include <math.h>
 #include "convexhull_2d.h"
 
-#define SWAPP(x, y, size) \
-do { \
-  void *tmp = malloc(size); \
-  memcpy(tmp, x, size); \
-  memcpy(x, y, size); \
-  memcpy(y, tmp, size); \
-}while(0)
+/******************************************************************************
+* Function:         void swapp
+*                   swap the content of the input pointers
+* Where:
+*                   void *x - TODO
+*                   void *y - TODO
+*                   size_t size - TODO
+* Return:           void
+* Error:            
+*****************************************************************************/
+void swapp(void *x, void *y, size_t size){
+  void *tmp = malloc(size);
+  memcpy(tmp, x, size);
+  memcpy(x, y, size);
+  memcpy(y, tmp, size);
+}
 
 /******************************************************************************
 * Function:         double ccw 
@@ -76,7 +85,7 @@ int convexhull_2d(point *ps, unsigned count){
   unsigned i;
   if (count <= 2) return count;
   unsigned min_index = argmin_y(ps, count);
-  SWAPP(ps, ps + min_index, sizeof(point));
+  swapp(ps, ps + min_index, sizeof(point));
   for (i = 1; i < count; ++i) {
     (ps + i)->x -= ps->x;
     (ps + i)->y -= ps->y;
@@ -104,7 +113,7 @@ int convexhull_2d(point *ps, unsigned count){
       }
     }
     num_convex += 1;
-    SWAPP(chain + num_convex, chain + i, sizeof(point));
+    swapp(chain + num_convex, chain + i, sizeof(point));
   }
   memcpy(ps, chain + 1, count * sizeof(point));
   free(chain);
@@ -154,4 +163,4 @@ int main()
   }
   printf("tot area is %f\n", area_convexhull_2d(ps, num));
   return 0;
-}
+} 
